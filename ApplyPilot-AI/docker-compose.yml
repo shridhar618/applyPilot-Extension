@@ -1,0 +1,32 @@
+# UNVERIFIED: written but not run (no Docker daemon in the build environment). Validate with `docker compose config` and `docker compose up --build`.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: applypilot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: applypilot
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U applypilot"]
+      interval: 5s
+      retries: 10
+  backend:
+    build: ./backend
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      APPLYPILOT_ENV: production
+      APPLYPILOT_SECRET_KEY: ${APPLYPILOT_SECRET_KEY:?set APPLYPILOT_SECRET_KEY (>=32 chars)}
+      APPLYPILOT_DATABASE_URL: postgresql+psycopg://applypilot:${POSTGRES_PASSWORD}@db:5432/applypilot
+      APPLYPILOT_UPLOAD_DIR: /data/resumes
+      APPLYPILOT_CORS_ORIGIN_REGEX: ${APPLYPILOT_CORS_ORIGIN_REGEX:-}
+      APPLYPILOT_AI_PROVIDER: ${APPLYPILOT_AI_PROVIDER:-none}
+      APPLYPILOT_AI_BASE_URL: ${APPLYPILOT_AI_BASE_URL:-}
+      APPLYPILOT_AI_MODEL: ${APPLYPILOT_AI_MODEL:-}
+      APPLYPILOT_AI_API_KEY: ${APPLYPILOT_AI_API_KEY:-}
+    volumes: [resumes:/data/resumes]
+    ports: ["8000:8000"]
+volumes:
+  pgdata:
+  resumes:

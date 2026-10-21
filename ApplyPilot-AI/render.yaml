@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: applypilot-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /ready
+    plan: starter
+    envVars:
+      - key: APPLYPILOT_ENV
+        value: production
+      - key: APPLYPILOT_DATABASE_URL
+        fromDatabase:
+          name: applypilot-db
+          property: connectionString
+      - key: APPLYPILOT_SECRET_KEY
+        generateValue: true
+      - key: APPLYPILOT_CORS_ORIGIN_REGEX
+        sync: false
+      - key: APPLYPILOT_UPLOAD_DIR
+        value: /data/resumes
+      - key: APPLYPILOT_AI_PROVIDER
+        value: none
+    disk:
+      name: applypilot-resumes
+      mountPath: /data
+      sizeGB: 1
+
+databases:
+  - name: applypilot-db
+    plan: basic-256mb

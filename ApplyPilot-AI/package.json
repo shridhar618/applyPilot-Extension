@@ -1,0 +1,21 @@
+{
+  "name": "applypilot-ai",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build:extension": "npm run build -w @applypilot/extension",
+    "dev:extension": "npm run dev -w @applypilot/extension",
+    "test:extension": "npm run test -w @applypilot/extension",
+    "typecheck": "npm run typecheck -w @applypilot/extension",
+    "lint": "npm run lint -w @applypilot/extension",
+    "backend:migrate": "cd backend && . .venv/bin/activate && alembic upgrade head",
+    "backend:dev": "cd backend && . .venv/bin/activate && uvicorn app.main:app --reload --port 8000",
+    "backend:test": "cd backend && . .venv/bin/activate && python -m pytest -q",
+    "package:extension": "npm run build:extension && python3 scripts/package-extension.py",
+    "test": "npm run backend:test && npm run test:extension"
+  }
+}

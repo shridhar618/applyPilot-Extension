@@ -1,0 +1,17 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body { @apply bg-bg font-sans text-ink antialiased text-[13px] leading-relaxed; margin: 0; }
+  :focus-visible { @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-bg; }
+  ::selection { background: rgba(34, 211, 238, 0.28); }
+  * { scrollbar-width: thin; scrollbar-color: #283244 transparent; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
