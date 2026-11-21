@@ -1,5 +1,7 @@
 # ApplyPilot AI
 
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white) ![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-4285F4?logo=googlechrome&logoColor=white)
+
 **Find better jobs. Build stronger resumes. Apply smarter.**
 
 A Chrome extension and FastAPI backend that reads a job posting, compares it with your resume, and shows an explainable, estimated compatibility score, with the evidence behind every skill verdict. Saved jobs go into an application tracker.
@@ -28,3 +30,20 @@ Setup instructions, the feature list and progress notes are in [`ApplyPilot-AI/R
 
 1. Open `chrome://extensions` and turn on **Developer mode**.
 2. Click **Load unpacked** and select `applypilot-ai-extension-0.1.0/`.
+
+
+## Environment variables
+
+Copy `ApplyPilot-AI/.env.example` to `backend/.env`. See that file for the full list, including scoring weight overrides.
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `APPLYPILOT_ENV` | `development` or `production` | `development` |
+| `APPLYPILOT_DATABASE_URL` | Database URL (SQLite locally, PostgreSQL in production) | `sqlite:///./applypilot.db` |
+| `APPLYPILOT_SECRET_KEY` | Token signing key. Required in production, at least 32 random characters | insecure dev value |
+| `APPLYPILOT_ACCESS_TOKEN_MINUTES` | Access token lifetime | `60` |
+| `APPLYPILOT_CORS_ORIGINS / APPLYPILOT_CORS_ORIGIN_REGEX` | Allowed origins; pin your extension ID in production | `http://localhost:5173` |
+| `APPLYPILOT_UPLOAD_DIR / APPLYPILOT_MAX_UPLOAD_BYTES` | Resume upload directory and size limit | `./storage/resumes`, 5 MB |
+| `APPLYPILOT_AI_PROVIDER` | `none`, `openai_compatible` or `anthropic`. Only AI explanations need it | `none` |
+| `APPLYPILOT_AI_BASE_URL / _MODEL / _API_KEY` | Settings for the chosen AI provider | empty |
+| `APPLYPILOT_SEMANTIC_BACKEND` | `lexical` or `sentence-transformers` | `lexical` |
